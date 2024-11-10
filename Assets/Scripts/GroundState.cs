@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : GroundState
+public class GroundState : PlayerState
 {
-    public PlayerIdleState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
-        stateMachine, animBoolName)
+    public GroundState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player, stateMachine,
+        animBoolName)
     {
     }
 
@@ -17,10 +17,6 @@ public class PlayerIdleState : GroundState
     public override void Update()
     {
         base.Update();
-        if (xInput != 0)
-        {
-            stateMachine.ChangeState(player.moveState);
-        }
     }
 
     public override void FixedUpdate()
