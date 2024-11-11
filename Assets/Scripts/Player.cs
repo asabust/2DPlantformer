@@ -1,3 +1,5 @@
+using System;
+using UnityEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,8 +9,15 @@ public class Player : MonoBehaviour
     public float jumpForce = 12.0f;
 
     [Header("Collision info")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckDistance = 0.4f;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float wallCheckDistance = 0.4f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
+
+    public int facingDir { get; private set; } = 1;
+    private bool facingRight = true;
 
 #region Components
 
@@ -57,5 +66,29 @@ public class Player : MonoBehaviour
     public void SetVelocity(Vector2 velocity)
     {
         rb.velocity = velocity;
+        FlipController(velocity.x);
+    }
+
+    public void Flip()
+    {
+        facingDir *= -1;
+        facingRight = !facingRight;
+        transform.Rotate(0, 180, 0);
+    }
+
+    public void FlipController(float _x)
+    {
+        if ((_x > 0 && !facingRight) || (_x < 0 && facingRight))
+            Flip();
+    }
+
+    public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(groundCheck.position,
+            new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
+        Gizmos.DrawLine(wallCheck.position,
+            new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
     }
 }

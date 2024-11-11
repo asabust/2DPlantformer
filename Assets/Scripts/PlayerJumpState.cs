@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJumpState : PlayerAirState
+public class PlayerJumpState : PlayerState
 {
     public PlayerJumpState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
         stateMachine, animBoolName)
@@ -12,7 +12,7 @@ public class PlayerJumpState : PlayerAirState
     public override void Enter()
     {
         base.Enter();
-        rb.velocity = new Vector2(rb.velocity.x, player.jumpForce);
+        rb.AddForce(Vector2.up * player.jumpForce, ForceMode2D.Impulse);
     }
 
     public override void Update()
