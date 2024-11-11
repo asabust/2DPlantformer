@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-#region Info
-
+    [Header("Movement")]
     public float moveSpeed = 10.0f;
+    public float jumpForce = 12.0f;
 
-#endregion
+    [Header("Collision info")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
 
 #region Components
 
@@ -20,6 +22,8 @@ public class Player : MonoBehaviour
     public PlayerStateMachine stateMachine { get; private set; }
     public PlayerState idleState { get; private set; }
     public PlayerState moveState { get; private set; }
+    public PlayerState jumpState { get; private set; }
+    public PlayerState airState { get; private set; }
 
 #endregion
 
@@ -28,6 +32,8 @@ public class Player : MonoBehaviour
         stateMachine = new PlayerStateMachine();
         idleState = new PlayerIdleState(this, stateMachine, "idle");
         moveState = new PlayerMoveState(this, stateMachine, "move");
+        jumpState = new PlayerJumpState(this, stateMachine, "jump");
+        airState = new PlayerAirState(this, stateMachine, "jump");
     }
 
     private void Start()

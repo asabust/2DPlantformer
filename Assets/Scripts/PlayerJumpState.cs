@@ -2,24 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundState : PlayerState
+public class PlayerJumpState : PlayerAirState
 {
-    public GroundState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player, stateMachine,
-        animBoolName)
+    public PlayerJumpState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
+        stateMachine, animBoolName)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
+        rb.velocity = new Vector2(rb.velocity.x, player.jumpForce);
     }
 
     public override void Update()
     {
         base.Update();
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (rb.velocity.y < 0)
         {
-            stateMachine.ChangeState(player.jumpState);
+            stateMachine.ChangeState(player.airState);
         }
     }
 
