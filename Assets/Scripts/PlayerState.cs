@@ -8,9 +8,11 @@ public class PlayerState
     protected Player player;
     protected Rigidbody2D rb;
 
-
     protected float xInput;
     private string animBoolName;
+
+    protected float stateTimer;
+    public float cooldown;
 
     public PlayerState(Player player, PlayerStateMachine stateMachine, string animBoolName)
     {
@@ -29,6 +31,7 @@ public class PlayerState
     {
         xInput = Input.GetAxis("Horizontal");
         player.anim.SetFloat("yVelocity", rb.velocity.y);
+        stateTimer -= Time.deltaTime;
     }
 
     public virtual void FixedUpdate()

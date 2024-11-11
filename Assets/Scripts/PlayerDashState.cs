@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : PlayerGroundState
+public class PlayerDashState : PlayerState
 {
-    public PlayerMoveState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
+    public PlayerDashState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
         stateMachine, animBoolName)
     {
     }
@@ -12,12 +12,13 @@ public class PlayerMoveState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
+        stateTimer = player.dashDuration;
     }
 
     public override void Update()
     {
         base.Update();
-        if (xInput == 0)
+        if (stateTimer < 0)
         {
             stateMachine.ChangeState(player.idleState);
         }
@@ -26,11 +27,12 @@ public class PlayerMoveState : PlayerGroundState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.SetVelocity(xInput * player.moveSpeed, rb.velocity.y);
+        player.SetVelocity(player.facingDir * player.dashSpeed, rb.velocity.y);
     }
 
     public override void Exit()
     {
         base.Exit();
+        player.SetVelocity(0, 0);
     }
 }

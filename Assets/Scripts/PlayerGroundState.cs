@@ -22,6 +22,11 @@ public class PlayerGroundState : PlayerState
         {
             stateMachine.ChangeState(player.jumpState);
         }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            stateMachine.ChangeState(player.dashState);
+        }
     }
 
     public override void FixedUpdate()
