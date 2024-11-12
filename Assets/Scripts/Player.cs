@@ -1,10 +1,12 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     [Header("Movement")]
+    public Vector2 moveInputValue;
     public float moveSpeed = 10.0f;
     public float jumpForce = 12.0f;
     public float dashSpeed = 15f;
@@ -25,6 +27,15 @@ public class Player : MonoBehaviour
 
     public Animator anim { get; private set; }
     public Rigidbody2D rb { get; private set; }
+
+#endregion
+
+#region Input
+
+    public Vector2 inputValue { get; private set; }
+    public InputAction moveAction { get; private set; }
+    public InputAction jumpAction { get; private set; }
+    public InputAction DashAction { get; private set; }
 
 #endregion
 
@@ -53,11 +64,15 @@ public class Player : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        moveAction = InputSystem.actions.FindAction("Move");
+        jumpAction = InputSystem.actions.FindAction("Jump");
+        DashAction = InputSystem.actions.FindAction("Dash");
         stateMachine.Initialize(idleState);
     }
 
     private void Update()
     {
+        moveInputValue = moveAction.ReadValue<Vector2>();
         stateMachine.currentState.Update();
     }
 

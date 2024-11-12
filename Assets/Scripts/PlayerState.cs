@@ -29,7 +29,7 @@ public class PlayerState
 
     public virtual void Update()
     {
-        xInput = Input.GetAxis("Horizontal");
+        xInput = player.moveInputValue.x;
         player.anim.SetFloat("yVelocity", rb.velocity.y);
         stateTimer -= Time.deltaTime;
     }

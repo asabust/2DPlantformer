@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c995535dd8f34a2882e75dc651795ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveInputValue: {x: 0, y: 0}
   moveSpeed: 8
   jumpForce: 12
   dashSpeed: 20

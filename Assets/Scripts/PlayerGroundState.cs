@@ -18,12 +18,12 @@ public class PlayerGroundState : PlayerState
     public override void Update()
     {
         base.Update();
-        if (Input.GetKeyDown(KeyCode.UpArrow) && player.IsGrounded())
+        if (player.jumpAction.IsPressed() && player.IsGrounded())
         {
             stateMachine.ChangeState(player.jumpState);
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (player.DashAction.IsPressed())
         {
             stateMachine.ChangeState(player.dashState);
         }
