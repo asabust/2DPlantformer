@@ -17,6 +17,7 @@ public class PlayerMoveState : PlayerGroundState
     public override void Update()
     {
         base.Update();
+        player.SetVelocity(xInput * player.moveSpeed, rb.velocity.y);
         if (xInput == 0)
         {
             stateMachine.ChangeState(player.idleState);
@@ -26,12 +27,10 @@ public class PlayerMoveState : PlayerGroundState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.SetVelocity(xInput * player.moveSpeed, rb.velocity.y);
     }
 
     public override void Exit()
     {
         base.Exit();
-        player.SetVelocity(0, 0);
     }
 }

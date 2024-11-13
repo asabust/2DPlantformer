@@ -27,7 +27,7 @@ public class PlayerDashState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.SetVelocity(player.facingDir * player.dashSpeed, rb.velocity.y);
+        player.SetVelocity(player.facingDir * player.dashSpeed, 0);
     }
 
     public override void Exit()

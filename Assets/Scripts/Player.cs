@@ -6,11 +6,12 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [Header("Movement")]
-    public Vector2 moveInputValue;
     public float moveSpeed = 10.0f;
     public float jumpForce = 12.0f;
     public float dashSpeed = 15f;
     public float dashDuration = 0.5f;
+    [SerializeField] private float dashCooldown = 1f;
+    private float dashUsageTimer;
 
     [Header("Collision info")]
     [SerializeField] private Transform groundCheck;
@@ -32,21 +33,21 @@ public class Player : MonoBehaviour
 
 #region Input
 
-    public Vector2 inputValue { get; private set; }
+    public Vector2 moveInputValue { get; private set; }
     public InputAction moveAction { get; private set; }
     public InputAction jumpAction { get; private set; }
-    public InputAction DashAction { get; private set; }
+    public InputAction dashAction { get; private set; }
 
 #endregion
 
 #region States
 
     public PlayerStateMachine stateMachine { get; private set; }
-    public PlayerState idleState { get; private set; }
-    public PlayerState moveState { get; private set; }
-    public PlayerState jumpState { get; private set; }
-    public PlayerState airState { get; private set; }
-    public PlayerState dashState { get; private set; }
+    public PlayerIdleState idleState { get; private set; }
+    public PlayerMoveState moveState { get; private set; }
+    public PlayerJumpState jumpState { get; private set; }
+    public PlayerAirState airState { get; private set; }
+    public PlayerDashState dashState { get; private set; }
 
 #endregion
 
@@ -66,13 +67,15 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
-        DashAction = InputSystem.actions.FindAction("Dash");
+        dashAction = InputSystem.actions.FindAction("Dash");
+        dashAction.started += Dash;
         stateMachine.Initialize(idleState);
     }
 
     private void Update()
     {
         moveInputValue = moveAction.ReadValue<Vector2>();
+        dashUsageTimer -= Time.deltaTime;
         stateMachine.currentState.Update();
     }
 
@@ -86,6 +89,15 @@ public class Player : MonoBehaviour
     {
         rb.velocity = new Vector2(x, y);
         FlipController(x);
+    }
+
+    private void Dash(InputAction.CallbackContext obj)
+    {
+        if (dashUsageTimer < 0)
+        {
+            dashUsageTimer = dashCooldown;
+            stateMachine.ChangeState(dashState);
+        }
     }
 
     public void Flip()
