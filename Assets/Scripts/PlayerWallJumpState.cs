@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDashState : PlayerState
+public class PlayerWallJumpState : PlayerState
 {
-    public PlayerDashState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
+    public PlayerWallJumpState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
         stateMachine, animBoolName)
     {
     }
@@ -12,19 +12,19 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        stateTimer = player.dashDuration;
+        stateTimer = 0.8f;
+        player.SetVelocity(player.wallJumpSpeed * -player.facingDir, player.jumpForce);
     }
 
     public override void Update()
     {
         base.Update();
-        if (!player.IsGrounded() && player.IsWall())
+        if (stateTimer < 0)
         {
-            stateMachine.ChangeState(player.wallSlideState);
+            stateMachine.ChangeState(player.airState);
         }
 
-        player.SetVelocity(player.facingDir * player.dashSpeed, 0);
-        if (stateTimer < 0)
+        if (player.IsGrounded())
         {
             stateMachine.ChangeState(player.idleState);
         }

@@ -22,6 +22,12 @@ public class PlayerWallSlideState : PlayerState
         float slideSpeendFacter = yInput < 0 ? 1.05f : 0.7f;
         rb.velocity = new Vector2(0f, rb.velocity.y * slideSpeendFacter);
 
+        if (player.jumpAction.IsPressed())
+        {
+            stateMachine.ChangeState(player.wallJumpState);
+            return;
+        }
+
         if (player.IsGrounded() || (xInput != 0 && player.facingDir != xInput))
         {
             stateMachine.ChangeState(player.idleState);

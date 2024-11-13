@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 10.0f;
     public float jumpForce = 12.0f;
+    public float wallJumpSpeed = 5f;
     public float dashSpeed = 15f;
     public float dashDuration = 0.5f;
     [SerializeField] private float dashCooldown = 1f;
@@ -19,7 +20,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform wallCheck;
     [SerializeField] private float wallCheckDistance = 0.4f;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask wallLayer;
 
     public float facingDir { get; private set; } = 1;
     private bool facingRight = true;
@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     public PlayerJumpState jumpState { get; private set; }
     public PlayerAirState airState { get; private set; }
     public PlayerWallSlideState wallSlideState { get; private set; }
+    public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerDashState dashState { get; private set; }
 
 #endregion
@@ -61,6 +62,7 @@ public class Player : MonoBehaviour
         airState = new PlayerAirState(this, stateMachine, "jump");
         dashState = new PlayerDashState(this, stateMachine, "dash");
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "wallSlide");
+        wallJumpState = new PlayerWallJumpState(this, stateMachine, "jump");
     }
 
     private void Start()
@@ -95,6 +97,7 @@ public class Player : MonoBehaviour
 
     private void Dash(InputAction.CallbackContext obj)
     {
+        if (IsWall()) return;
         if (dashUsageTimer < 0)
         {
             dashUsageTimer = dashCooldown;
