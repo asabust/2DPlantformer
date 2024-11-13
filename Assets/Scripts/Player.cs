@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
 
-    public int facingDir { get; private set; } = 1;
+    public float facingDir { get; private set; } = 1;
     private bool facingRight = true;
 
 #region Components
@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
     public PlayerMoveState moveState { get; private set; }
     public PlayerJumpState jumpState { get; private set; }
     public PlayerAirState airState { get; private set; }
+    public PlayerWallSlideState wallSlideState { get; private set; }
     public PlayerDashState dashState { get; private set; }
 
 #endregion
@@ -59,6 +60,7 @@ public class Player : MonoBehaviour
         jumpState = new PlayerJumpState(this, stateMachine, "jump");
         airState = new PlayerAirState(this, stateMachine, "jump");
         dashState = new PlayerDashState(this, stateMachine, "dash");
+        wallSlideState = new PlayerWallSlideState(this, stateMachine, "wallSlide");
     }
 
     private void Start()
@@ -114,6 +116,9 @@ public class Player : MonoBehaviour
     }
 
     public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
+
+    public bool IsWall() =>
+        Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, groundLayer);
 
     public void OnDrawGizmos()
     {

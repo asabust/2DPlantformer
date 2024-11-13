@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 65714662}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08, y: -4.44, z: 0}
+  m_LocalPosition: {x: 10.52, y: 3.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -175,10 +175,11 @@ MonoBehaviour:
   jumpForce: 13
   dashSpeed: 20
   dashDuration: 0.2
+  dashCooldown: 1
   groundCheck: {fileID: 1539956773}
   groundCheckDistance: 0.1
   wallCheck: {fileID: 1076610908}
-  wallCheckDistance: 0.3
+  wallCheckDistance: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -221,7 +222,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 65714662}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7c82cb65d6c9b401895e34940b706c5b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -463,8 +464,8 @@ Transform:
   m_GameObject: {fileID: 945934079}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.99, y: -4.08, z: 0}
-  m_LocalScale: {x: 4.3992, y: 2.16, z: 1.3536}
+  m_LocalPosition: {x: -11.99, y: -2.46, z: 0}
+  m_LocalScale: {x: 4.3992, y: 5.5, z: 1.3536}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -494,7 +495,7 @@ Transform:
   m_GameObject: {fileID: 1076610907}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 1.29, z: 0}
+  m_LocalPosition: {x: 0.25, y: 1.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

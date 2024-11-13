@@ -18,21 +18,15 @@ public class PlayerDashState : PlayerState
     public override void Update()
     {
         base.Update();
+        player.SetVelocity(player.facingDir * player.dashSpeed, 0);
         if (stateTimer < 0)
         {
             stateMachine.ChangeState(player.idleState);
         }
     }
 
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        player.SetVelocity(player.facingDir * player.dashSpeed, 0);
-    }
-
     public override void Exit()
     {
         base.Exit();
-        player.SetVelocity(0, 0);
     }
 }
