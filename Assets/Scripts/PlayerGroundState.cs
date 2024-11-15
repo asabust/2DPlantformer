@@ -18,6 +18,12 @@ public class PlayerGroundState : PlayerState
     public override void Update()
     {
         base.Update();
+
+        if (player.attackAction.IsPressed())
+        {
+            stateMachine.ChangeState(player.primaryAttackState);
+        }
+
         if (!player.IsGrounded())
         {
             stateMachine.ChangeState(player.airState);

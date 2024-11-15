@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
 
     public Vector2 moveInputValue { get; private set; }
     public InputAction moveAction { get; private set; }
+    public InputAction attackAction { get; private set; }
     public InputAction jumpAction { get; private set; }
     public InputAction dashAction { get; private set; }
 
@@ -50,6 +51,7 @@ public class Player : MonoBehaviour
     public PlayerWallSlideState wallSlideState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerDashState dashState { get; private set; }
+    public PlayerPrimaryAttackState primaryAttackState { get; private set; }
 
 #endregion
 
@@ -63,6 +65,7 @@ public class Player : MonoBehaviour
         dashState = new PlayerDashState(this, stateMachine, "dash");
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "wallSlide");
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "jump");
+        primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, "attack");
     }
 
     private void Start()
@@ -70,6 +73,7 @@ public class Player : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         moveAction = InputSystem.actions.FindAction("Move");
+        attackAction = InputSystem.actions.FindAction("Fire");
         jumpAction = InputSystem.actions.FindAction("Jump");
         dashAction = InputSystem.actions.FindAction("Dash");
         dashAction.started += Dash;
@@ -88,11 +92,20 @@ public class Player : MonoBehaviour
         stateMachine.currentState.FixedUpdate();
     }
 
+    public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();
+
 
     public void SetVelocity(float x, float y)
     {
         rb.velocity = new Vector2(x, y);
         FlipController(x);
+    }
+
+    public void Flip()
+    {
+        facingDir *= -1;
+        facingRight = !facingRight;
+        transform.Rotate(0, 180, 0);
     }
 
     private void Dash(InputAction.CallbackContext obj)
@@ -103,13 +116,6 @@ public class Player : MonoBehaviour
             dashUsageTimer = dashCooldown;
             stateMachine.ChangeState(dashState);
         }
-    }
-
-    public void Flip()
-    {
-        facingDir *= -1;
-        facingRight = !facingRight;
-        transform.Rotate(0, 180, 0);
     }
 
     public void FlipController(float _x)

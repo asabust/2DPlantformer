@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : PlayerGroundState
+public class PlayerPrimaryAttackState : PlayerState
 {
-    public PlayerMoveState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
+    // Start is called before the first frame update
+    public PlayerPrimaryAttackState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
         stateMachine, animBoolName)
     {
     }
@@ -12,21 +13,19 @@ public class PlayerMoveState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
+
+
+        Debug.Log($"Attack Enter v {player.rb.velocity.x}");
     }
 
     public override void Update()
     {
         base.Update();
-        player.SetVelocity(xInput * player.moveSpeed, rb.velocity.y);
-        if (xInput == 0 || player.IsWall())
+        player.rb.velocity = Vector2.zero;
+        if (triggerCalled)
         {
             stateMachine.ChangeState(player.idleState);
         }
-    }
-
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
     }
 
     public override void Exit()
