@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class PlayerPrimaryAttackState : PlayerState
 {
-    // Start is called before the first frame update
+    private int comboCounter = 0;
+    private float lastTimeAttacked;
+    private float comboWindow = 0.5f;
+
     public PlayerPrimaryAttackState(Player player, PlayerStateMachine stateMachine, string animBoolName) : base(player,
         stateMachine, animBoolName)
     {
@@ -13,9 +16,12 @@ public class PlayerPrimaryAttackState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        if (comboCounter > 2 || Time.time > lastTimeAttacked + comboWindow)
+        {
+            comboCounter = 0;
+        }
 
-
-        Debug.Log($"Attack Enter v {player.rb.velocity.x}");
+        player.anim.SetInteger("combo", comboCounter);
     }
 
     public override void Update()
@@ -31,5 +37,7 @@ public class PlayerPrimaryAttackState : PlayerState
     public override void Exit()
     {
         base.Exit();
+        comboCounter++;
+        lastTimeAttacked = Time.time;
     }
 }
