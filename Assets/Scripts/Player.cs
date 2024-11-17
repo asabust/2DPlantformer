@@ -1,10 +1,16 @@
 using System;
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public bool isBusy { get; private set; }
+
+    [Header("Collision info")]
+    public Vector2[] attackMovement;
+
     [Header("Movement")]
     public float moveSpeed = 10.0f;
     public float jumpForce = 12.0f;
@@ -92,8 +98,14 @@ public class Player : MonoBehaviour
         stateMachine.currentState.FixedUpdate();
     }
 
-    public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();
+    public IEnumerator Busyfor(float waitTime)
+    {
+        isBusy = true;
+        yield return new WaitForSeconds(waitTime);
+        isBusy = false;
+    }
 
+    public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();
 
     public void SetVelocity(float x, float y)
     {
@@ -108,6 +120,12 @@ public class Player : MonoBehaviour
         transform.Rotate(0, 180, 0);
     }
 
+    public void FlipController(float _x)
+    {
+        if ((_x > 0 && !facingRight) || (_x < 0 && facingRight))
+            Flip();
+    }
+
     private void Dash(InputAction.CallbackContext obj)
     {
         if (IsWall()) return;
@@ -116,12 +134,6 @@ public class Player : MonoBehaviour
             dashUsageTimer = dashCooldown;
             stateMachine.ChangeState(dashState);
         }
-    }
-
-    public void FlipController(float _x)
-    {
-        if ((_x > 0 && !facingRight) || (_x < 0 && facingRight))
-            Flip();
     }
 
     public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
