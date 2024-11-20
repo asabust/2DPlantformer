@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
     public bool isBusy { get; private set; }
 
@@ -20,22 +20,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float dashCooldown = 1f;
     private float dashUsageTimer;
 
-    [Header("Collision info")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckDistance = 0.4f;
-    [SerializeField] private Transform wallCheck;
-    [SerializeField] private float wallCheckDistance = 0.4f;
-    [SerializeField] private LayerMask groundLayer;
-
-    public float facingDir { get; private set; } = 1;
-    private bool facingRight = true;
-
-#region Components
-
-    public Animator anim { get; private set; }
-    public Rigidbody2D rb { get; private set; }
-
-#endregion
 
 #region Input
 
@@ -61,8 +45,9 @@ public class Player : MonoBehaviour
 
 #endregion
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         stateMachine = new PlayerStateMachine();
         idleState = new PlayerIdleState(this, stateMachine, "idle");
         moveState = new PlayerMoveState(this, stateMachine, "move");
@@ -74,10 +59,9 @@ public class Player : MonoBehaviour
         primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, "attack");
     }
 
-    private void Start()
+    protected override void Start()
     {
-        anim = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        base.Start();
         moveAction = InputSystem.actions.FindAction("Move");
         attackAction = InputSystem.actions.FindAction("Fire");
         jumpAction = InputSystem.actions.FindAction("Jump");
@@ -86,8 +70,9 @@ public class Player : MonoBehaviour
         stateMachine.Initialize(idleState);
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         moveInputValue = moveAction.ReadValue<Vector2>();
         dashUsageTimer -= Time.deltaTime;
         stateMachine.currentState.Update();
@@ -98,7 +83,7 @@ public class Player : MonoBehaviour
         stateMachine.currentState.FixedUpdate();
     }
 
-    public IEnumerator Busyfor(float waitTime)
+    public IEnumerator BusyFor(float waitTime)
     {
         isBusy = true;
         yield return new WaitForSeconds(waitTime);
@@ -107,24 +92,6 @@ public class Player : MonoBehaviour
 
     public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();
 
-    public void SetVelocity(float x, float y)
-    {
-        rb.velocity = new Vector2(x, y);
-        FlipController(x);
-    }
-
-    public void Flip()
-    {
-        facingDir *= -1;
-        facingRight = !facingRight;
-        transform.Rotate(0, 180, 0);
-    }
-
-    public void FlipController(float _x)
-    {
-        if ((_x > 0 && !facingRight) || (_x < 0 && facingRight))
-            Flip();
-    }
 
     private void Dash(InputAction.CallbackContext obj)
     {
@@ -134,18 +101,5 @@ public class Player : MonoBehaviour
             dashUsageTimer = dashCooldown;
             stateMachine.ChangeState(dashState);
         }
-    }
-
-    public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
-
-    public bool IsWall() =>
-        Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, groundLayer);
-
-    public void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(groundCheck.position,
-            new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
-        Gizmos.DrawLine(wallCheck.position,
-            new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
     }
 }

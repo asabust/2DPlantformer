@@ -53,6 +53,6 @@ public class PlayerPrimaryAttackState : PlayerState
         base.Exit();
         comboCounter++;
         lastTimeAttacked = Time.time;
-        player.StartCoroutine("Busyfor", .15f);
+        player.StartCoroutine("BusyFor", .15f);
     }
 }
