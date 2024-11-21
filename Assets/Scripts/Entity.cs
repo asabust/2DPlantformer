@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float stairsCheckDistance = 0.4f;
     [SerializeField] protected LayerMask groundLayer;
 
-    public float facingDir { get; private set; } = 1;
+    public int facingDir { get; private set; } = 1;
     protected bool facingRight = true;
 
 #region Components
@@ -43,6 +43,11 @@ public class Entity : MonoBehaviour
         FlipController(x);
     }
 
+    public void StopMove()
+    {
+        rb.velocity = Vector2.zero;
+    }
+
     public void Flip()
     {
         facingDir *= -1;
@@ -50,11 +55,12 @@ public class Entity : MonoBehaviour
         transform.Rotate(0, 180, 0);
     }
 
-    public void FlipController(float _x)
+    private void FlipController(float _x)
     {
         if ((_x > 0 && !facingRight) || (_x < 0 && facingRight))
             Flip();
     }
+
 
 #region Collision
 
@@ -64,7 +70,7 @@ public class Entity : MonoBehaviour
     public virtual bool IsWall() =>
         Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, groundLayer);
 
-    public virtual RaycastHit2D CheckStairs() =>
+    public virtual RaycastHit2D IsStairsDetected() =>
         Physics2D.Raycast(stairsCheck.position, Vector2.right * facingDir, stairsCheckDistance, groundLayer);
 
     protected virtual void OnDrawGizmos()

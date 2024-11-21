@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonIdleState : SkeletonGroundState
+public class SkeletonGroundState : EnemyState
 {
-    public SkeletonIdleState(Enemy _enemy, EnemyStateMachine _stateMachine, string _animBoolName) : base(_enemy,
+    protected EnemySkeleton enemy;
+
+    public SkeletonGroundState(Enemy _enemy, EnemyStateMachine _stateMachine, string _animBoolName) : base(_enemy,
         _stateMachine, _animBoolName)
     {
+        enemy = _enemy as EnemySkeleton;
     }
 
     public override void Enter()
     {
         base.Enter();
-        stateTimer = enemy.idleTime;
-        enemy.StopMove();
     }
 
     public override void Update()
     {
         base.Update();
-
-        if (stateTimer < 0f)
+        if (enemy.IsPlayerDetected().collider is not null)
         {
-            stateMachine.ChangeState(enemy.moveState);
+            stateMachine.ChangeState(enemy.battleState);
         }
     }
 

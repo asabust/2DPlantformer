@@ -39,7 +39,7 @@ public class PlayerPrimaryAttackState : PlayerState
         base.Update();
         if (stateTimer < 0)
         {
-            player.rb.velocity = Vector2.zero;
+            player.StopMove();
         }
 
         if (triggerCalled)

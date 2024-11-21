@@ -18,19 +18,19 @@ public class PlayerMoveState : PlayerGroundState
     {
         base.Update();
 
+        // StairMove();
+        player.SetVelocity(xInput * player.moveSpeed, rb.velocity.y);
+
         if (xInput == 0 || player.IsWall())
         {
             stateMachine.ChangeState(player.idleState);
-            return;
         }
-
-        player.SetVelocity(xInput * player.moveSpeed, rb.velocity.y);
-        // StairMove();
     }
 
     private void StairMove()
     {
-        RaycastHit2D hit = player.CheckStairs();
+        // 在斜坡上用射线可能检测不到地面，以后改成别的地面检测再试
+        RaycastHit2D hit = player.IsStairsDetected();
         if (hit.collider is not null && !player.IsWall())
         {
             player.SetVelocity(xInput * player.moveSpeed * hit.normal.y,
