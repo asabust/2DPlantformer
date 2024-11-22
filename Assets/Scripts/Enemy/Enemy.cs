@@ -9,9 +9,12 @@ public class Enemy : Entity
     [Header("Movement")]
     public float moveSpeed = 2f;
     public float idleTime = 2f;
+    public float battleTime = 4f;
 
     [Header("Attack")]
     public float attackDistance = 5f;
+    public float attackCooldown = 1;
+    [HideInInspector] public float lastTimeAttacked = 0;
 
     public EnemyStateMachine stateMachine;
 

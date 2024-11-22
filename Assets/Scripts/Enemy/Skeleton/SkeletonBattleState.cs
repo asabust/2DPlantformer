@@ -27,21 +27,41 @@ public class SkeletonBattleState : EnemyState
         RaycastHit2D hit = enemy.IsPlayerDetected();
         if (hit.collider is not null)
         {
-            moveDir = player.position.x > enemy.transform.position.x ? 1 : -1;
-            enemy.MoveToward(moveDir);
+            stateTimer = enemy.battleTime;
             if (hit.distance < enemy.attackDistance)
             {
-                stateMachine.ChangeState(enemy.attackState);
+                if (CanAttack())
+                {
+                    stateMachine.ChangeState(enemy.attackState);
+                }
             }
         }
         else
         {
-            stateMachine.ChangeState(enemy.idleState);
+            //TODO : 仇恨范围。设置好场景之后再调整。
+            if (stateTimer < 0 || Vector3.Distance(player.position, enemy.transform.position) < 10)
+            {
+                stateMachine.ChangeState(enemy.idleState);
+            }
         }
+
+        moveDir = player.position.x > enemy.transform.position.x ? 1 : -1;
+        enemy.MoveToward(moveDir);
     }
 
     public override void Exit()
     {
         base.Exit();
+    }
+
+    private bool CanAttack()
+    {
+        if (Time.time >= enemy.lastTimeAttacked + enemy.attackCooldown)
+        {
+            enemy.lastTimeAttacked = Time.time;
+            return true;
+        }
+
+        return false;
     }
 }
