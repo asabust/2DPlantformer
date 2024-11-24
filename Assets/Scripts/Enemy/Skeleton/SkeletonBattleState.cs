@@ -38,14 +38,15 @@ public class SkeletonBattleState : EnemyState
         }
         else
         {
-            //TODO : 仇恨范围。设置好场景之后再调整。
+            //TODO : 暂定仇恨范围10。设置好场景之后再调整。
             if (stateTimer < 0 || Vector3.Distance(player.position, enemy.transform.position) < 10)
             {
                 stateMachine.ChangeState(enemy.idleState);
             }
         }
 
-        moveDir = player.position.x > enemy.transform.position.x ? 1 : -1;
+        if (Vector3.Distance(player.position, enemy.transform.position) > 0.1)
+            moveDir = player.position.x > enemy.transform.position.x ? 1 : -1;
         enemy.MoveToward(moveDir, enemy.chaseSpeed);
     }
 

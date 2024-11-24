@@ -17,6 +17,13 @@ public class Enemy : Entity
     public float attackCooldown = 1;
     [HideInInspector] public float lastTimeAttacked = 0;
 
+    [Header("Stun")]
+    public Vector2 stunFource;
+    public float stunDuration = 1f;
+
+    public GameObject counterImage;
+    private bool canBeStunned = false;
+
     public EnemyStateMachine stateMachine;
 
     protected override void Awake()
@@ -55,7 +62,30 @@ public class Enemy : Entity
         MoveToward(direction, moveSpeed);
     }
 
-    public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();
+    public virtual void OpenCounterAttackWindow()
+    {
+        canBeStunned = true;
+        counterImage.SetActive(true);
+    }
+
+    public virtual void CloseCounterAttackWindow()
+    {
+        canBeStunned = false;
+        counterImage.SetActive(false);
+    }
+
+    public virtual bool CanBeStunned()
+    {
+        if (canBeStunned)
+        {
+            CloseCounterAttackWindow();
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();
 
     public virtual RaycastHit2D IsPlayerDetected() =>
         Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, playerLayer);

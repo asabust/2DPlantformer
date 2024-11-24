@@ -19,4 +19,7 @@ public class EnemyAnimationTriggers : MonoBehaviour
             hit.GetComponent<Player>()?.Damage();
         }
     }
+
+    private void OpenCounterWindow() => enemy.OpenCounterAttackWindow();
+    private void CloseCounterWindow() => enemy.CloseCounterAttackWindow();
 }

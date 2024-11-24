@@ -18,11 +18,14 @@ public class PlayerIdleState : PlayerGroundState
     public override void Update()
     {
         base.Update();
+
         if (xInput == player.facingDir && player.IsWall()) return;
         if (xInput != 0 && !player.isBusy)
         {
             stateMachine.ChangeState(player.moveState);
         }
+
+        rb.velocity = new Vector2(0f, rb.velocity.y);
     }
 
     public override void FixedUpdate()

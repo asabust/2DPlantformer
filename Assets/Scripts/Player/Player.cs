@@ -8,8 +8,10 @@ public class Player : Entity
 {
     public bool isBusy { get; private set; }
 
-    [Header("Collision info")]
+    [Header("Attack info")]
     public Vector2[] attackMovement;
+    public float counterAttackDuration = 0.2f;
+
 
     [Header("Movement")]
     public float moveSpeed = 10.0f;
@@ -28,6 +30,7 @@ public class Player : Entity
     public InputAction attackAction { get; private set; }
     public InputAction jumpAction { get; private set; }
     public InputAction dashAction { get; private set; }
+    public InputAction counterAttackAction { get; private set; }
 
 #endregion
 
@@ -42,6 +45,7 @@ public class Player : Entity
     public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerPrimaryAttackState primaryAttackState { get; private set; }
+    public PlayerCounterAttackState counterAttackState { get; private set; }
 
 #endregion
 
@@ -57,6 +61,7 @@ public class Player : Entity
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "wallSlide");
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "jump");
         primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, "attack");
+        counterAttackState = new PlayerCounterAttackState(this, stateMachine, "counterAttack");
     }
 
     protected override void Start()
@@ -64,6 +69,7 @@ public class Player : Entity
         base.Start();
         moveAction = InputSystem.actions.FindAction("Move");
         attackAction = InputSystem.actions.FindAction("Fire");
+        counterAttackAction = InputSystem.actions.FindAction("CounterAttack");
         jumpAction = InputSystem.actions.FindAction("Jump");
         dashAction = InputSystem.actions.FindAction("Dash");
         dashAction.started += Dash;

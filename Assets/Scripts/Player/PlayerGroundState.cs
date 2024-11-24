@@ -19,6 +19,11 @@ public class PlayerGroundState : PlayerState
     {
         base.Update();
 
+        if (player.counterAttackAction.WasPressedThisFrame())
+        {
+            stateMachine.ChangeState(player.counterAttackState);
+        }
+
         if (player.attackAction.IsPressed())
         {
             stateMachine.ChangeState(player.primaryAttackState);

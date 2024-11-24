@@ -25,7 +25,7 @@ public class Entity : MonoBehaviour
 
 #region Components
 
-    private EntityFX fx;
+    public EntityFX fx;
     public Animator anim { get; private set; }
     public Rigidbody2D rb { get; private set; }
 
