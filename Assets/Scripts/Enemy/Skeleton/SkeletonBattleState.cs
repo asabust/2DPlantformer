@@ -46,7 +46,7 @@ public class SkeletonBattleState : EnemyState
         }
 
         moveDir = player.position.x > enemy.transform.position.x ? 1 : -1;
-        enemy.MoveToward(moveDir);
+        enemy.MoveToward(moveDir, enemy.chaseSpeed);
     }
 
     public override void Exit()

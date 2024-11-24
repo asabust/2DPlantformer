@@ -8,6 +8,7 @@ public class Enemy : Entity
 
     [Header("Movement")]
     public float moveSpeed = 2f;
+    public float chaseSpeed = 5f;
     public float idleTime = 2f;
     public float battleTime = 4f;
 
@@ -35,19 +36,23 @@ public class Enemy : Entity
         stateMachine.currentState.Update();
     }
 
-    public void MoveToward(int direction)
+    public void MoveToward(int direction, float speed)
     {
         RaycastHit2D hit = IsStairsDetected();
         if (hit.collider is not null && !IsWall())
         {
-            // Debug.Log($"{hit.normal}, {skeleton.facingDir}");
-            SetVelocity(moveSpeed * direction * hit.normal.y,
-                direction * -hit.normal.x);
+            SetVelocity(speed * direction * hit.normal.y,
+                direction * -hit.normal.x * rb.gravityScale);
         }
         else
         {
-            SetVelocity(moveSpeed * direction, rb.velocity.y);
+            SetVelocity(speed * direction, rb.velocity.y);
         }
+    }
+
+    public void MoveToward(int direction)
+    {
+        MoveToward(direction, moveSpeed);
     }
 
     public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishedTrigger();

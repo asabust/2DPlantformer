@@ -5,6 +5,8 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     [Header("Collision info")]
+    public Transform attackCheck;
+    public float attackRadius;
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance = 0.4f;
     [SerializeField] protected Transform wallCheck;
@@ -13,11 +15,17 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float stairsCheckDistance = 0.4f;
     [SerializeField] protected LayerMask groundLayer;
 
+    [Header("konckback info")]
+    [SerializeField] protected Vector2 konckbackForce;
+    [SerializeField] protected float konckbackDuration = 0.07f;
+    protected bool isKnockedBack = false;
+
     public int facingDir { get; private set; } = 1;
     protected bool facingRight = true;
 
 #region Components
 
+    private EntityFX fx;
     public Animator anim { get; private set; }
     public Rigidbody2D rb { get; private set; }
 
@@ -31,20 +39,39 @@ public class Entity : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        fx = GetComponent<EntityFX>();
     }
 
     protected virtual void Update()
     {
     }
 
+    public virtual void Damage()
+    {
+        // Debug.Log($"{gameObject.name} was damaged");
+        fx.PlayFlashEffect();
+        if (konckbackDuration > 0) StartCoroutine(KnockBack());
+    }
+
+    protected virtual IEnumerator KnockBack()
+    {
+        isKnockedBack = true;
+        rb.velocity = new Vector2(konckbackForce.x * -facingDir, konckbackForce.y);
+        yield return new WaitForSeconds(konckbackDuration);
+        isKnockedBack = false;
+    }
+
     public void SetVelocity(float x, float y)
     {
+        if (isKnockedBack) return;
+
         rb.velocity = new Vector2(x, y);
         FlipController(x);
     }
 
     public void StopMove()
     {
+        if (isKnockedBack) return;
         rb.velocity = Vector2.zero;
     }
 
@@ -79,6 +106,7 @@ public class Entity : MonoBehaviour
             new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position,
             new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
+        Gizmos.DrawWireSphere(attackCheck.position, attackRadius);
         if (stairsCheck)
         {
             Gizmos.DrawLine(stairsCheck.position,

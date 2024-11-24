@@ -10,4 +10,13 @@ public class EnemyAnimationTriggers : MonoBehaviour
     {
         enemy.AnimationFinishTrigger();
     }
+
+    public void AttackTrigger()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(enemy.attackCheck.position, enemy.attackRadius);
+        foreach (var hit in colliders)
+        {
+            hit.GetComponent<Player>()?.Damage();
+        }
+    }
 }
