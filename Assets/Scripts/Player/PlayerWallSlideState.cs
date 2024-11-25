@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerWallSlideState : PlayerState
@@ -22,13 +23,13 @@ public class PlayerWallSlideState : PlayerState
         float slideSpeendFacter = yInput < 0 ? 1.05f : 0.7f;
         rb.velocity = new Vector2(0f, rb.velocity.y * slideSpeendFacter);
 
-        if (player.jumpAction.IsPressed())
+        if (player.jumpAction.WasPressedThisFrame())
         {
             stateMachine.ChangeState(player.wallJumpState);
             return;
         }
 
-        if (player.IsGrounded() || (xInput != 0 && player.facingDir != xInput))
+        if (player.IsGrounded() || (xInput != 0 && Mathf.Sign(player.facingDir) != Mathf.Sign(xInput)))
         {
             stateMachine.ChangeState(player.idleState);
         }

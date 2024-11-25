@@ -34,7 +34,7 @@ public class PlayerGroundState : PlayerState
             stateMachine.ChangeState(player.airState);
         }
 
-        if (player.jumpAction.IsPressed() && player.IsGrounded())
+        if (player.jumpAction.WasPressedThisFrame() && player.IsGrounded())
         {
             stateMachine.ChangeState(player.jumpState);
         }
