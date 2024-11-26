@@ -19,9 +19,6 @@ public class Player : Entity
     public float wallJumpSpeed = 5f;
     public float dashSpeed = 15f;
     public float dashDuration = 0.5f;
-    [SerializeField] private float dashCooldown = 1f;
-    private float dashUsageTimer;
-
 
 #region Input
 
@@ -80,7 +77,6 @@ public class Player : Entity
     {
         base.Update();
         moveInputValue = moveAction.ReadValue<Vector2>();
-        dashUsageTimer -= Time.deltaTime;
         stateMachine.currentState.Update();
     }
 
@@ -102,9 +98,8 @@ public class Player : Entity
     private void Dash(InputAction.CallbackContext obj)
     {
         if (IsWall()) return;
-        if (dashUsageTimer < 0)
+        if (SkillManager.instance.dashSkill.CanUseSkill())
         {
-            dashUsageTimer = dashCooldown;
             stateMachine.ChangeState(dashState);
         }
     }

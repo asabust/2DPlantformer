@@ -27,7 +27,6 @@ public class ParallaxBackground : MonoBehaviour
         }
         else if (distanceMoved < xPosition - length / 2)
         {
-            Debug.Log(distanceMoved);
             xPosition = xPosition - length;
         }
     }
