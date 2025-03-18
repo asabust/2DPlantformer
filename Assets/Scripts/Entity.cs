@@ -48,7 +48,7 @@ public class Entity : MonoBehaviour
 
     public virtual void Damage()
     {
-        // Debug.Log($"{gameObject.name} was damaged");
+        Debug.Log($"{gameObject.name} was damaged");
         fx.PlayFlashEffect();
         if (konckbackDuration > 0) StartCoroutine(KnockBack());
     }

@@ -6,7 +6,7 @@ public class Enemy : Entity
 {
     [SerializeField] protected LayerMask playerLayer;
 
-    [Header("Movement")]
+    [Header("Enemy Movement")]
     public float moveSpeed = 2f;
     public float chaseSpeed = 5f;
     public float idleTime = 2f;

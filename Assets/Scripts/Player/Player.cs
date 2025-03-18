@@ -46,6 +46,8 @@ public class Player : Entity
 
 #endregion
 
+    public SkillManager skill { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -71,6 +73,8 @@ public class Player : Entity
         dashAction = InputSystem.actions.FindAction("Dash");
         dashAction.started += Dash;
         stateMachine.Initialize(idleState);
+
+        skill = SkillManager.instance;
     }
 
     protected override void Update()
@@ -98,7 +102,7 @@ public class Player : Entity
     private void Dash(InputAction.CallbackContext obj)
     {
         if (IsWall()) return;
-        if (SkillManager.instance.dashSkill.CanUseSkill())
+        if (SkillManager.instance.dash.CanUseSkill())
         {
             stateMachine.ChangeState(dashState);
         }

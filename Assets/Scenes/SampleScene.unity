@@ -251,7 +251,7 @@ Transform:
   m_GameObject: {fileID: 65714662}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.74, y: -2.37, z: 0}
+  m_LocalPosition: {x: 11.22, y: -3.93, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -298,7 +298,6 @@ MonoBehaviour:
   wallJumpSpeed: 5
   dashSpeed: 20
   dashDuration: 0.2
-  dashCooldown: 1
 --- !u!50 &65714665
 Rigidbody2D:
   serializedVersion: 4
@@ -386,6 +385,7 @@ GameObject:
   - component: {fileID: 93907167}
   - component: {fileID: 93907168}
   - component: {fileID: 93907169}
+  - component: {fileID: 93907170}
   m_Layer: 0
   m_Name: SkillManager
   m_TagString: Untagged
@@ -420,7 +420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a2fcecd93df4bc89e772b87eb66e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSkill: {fileID: 0}
 --- !u!114 &93907169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,6 +433,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 1
+--- !u!114 &93907170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93907166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50eb313c58fb04d549116753761c93f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 1
+  clonePrefab: {fileID: 5260973412269524886, guid: e24f747cc299b4e25a68bb6d188dc6c9, type: 3}
+  cloneDuration: 1.5
+  canAttack: 1
 --- !u!1001 &163455595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -485,6 +500,10 @@ PrefabInstance:
     - target: {fileID: 4409188289856195873, guid: 4dffeee1a4a234415ba68125c51afde3, type: 3}
       propertyPath: m_Name
       value: Enemy_Skeleton (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877391386859129748, guid: 4dffeee1a4a234415ba68125c51afde3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -656,7 +675,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.65000033, y: 1, z: -10}
+  m_LocalPosition: {x: 9.78, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -806,7 +825,7 @@ Transform:
   m_GameObject: {fileID: 721753673}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.65000033, y: 1, z: -10}
+  m_LocalPosition: {x: 9.78, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14600,6 +14619,10 @@ PrefabInstance:
     - target: {fileID: 4409188289856195873, guid: 4dffeee1a4a234415ba68125c51afde3, type: 3}
       propertyPath: m_Name
       value: Enemy_Skeleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877391386859129748, guid: 4dffeee1a4a234415ba68125c51afde3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
